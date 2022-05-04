@@ -7,7 +7,7 @@ description = "A list of useful crates for the rust programming language."
 aliases = ["/blog/rust-crates-every-developer-should-know/"]
 
 [taxonomies]
-tags = ["rust", "rustlang"]
+tags = ["rust"]
 categories = ["Programming"]
 
 [extra]

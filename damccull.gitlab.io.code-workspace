@@ -4,5 +4,12 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"search.exclude": {
+			"public": true,
+		  },
+		  "files.exclude": {
+			"public": true,
+		  },
+	}
 }

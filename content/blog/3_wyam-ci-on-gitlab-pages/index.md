@@ -10,9 +10,9 @@ tags = ["Wyam", "Website"]
 categories = ["Lessons"]
 +++
 
-<div class="note">
+<note>
     NOTE: Wyam has been supersceded by a project called Statiq. This post is not necessarily accurate any longer and the instructions may or may not work. They will probably not work at all for Statiq.
-</div>
+</note>
 
 # Introduction
 Continuous Integration with Wyam is a quest many have considered and promptly rejected because...it's hard. It's not natively supported on many platforms because it doesn't run on linux. At least not at the time of this article's publication. But take heart, brave adventurer, for all is not lost! Two possibilites exist to triumph in your quest: either wait for .NET Core support or follow this very tutorial.
@@ -133,7 +133,7 @@ The `script` sub-section is where the Wyam site is actually generated. It's a se
 7. Invoke 7zip to unzip the file
 8. Run the Wyam tool to generate the site
 
-<div class="note">Note: I really don't know why I didn't just save the Wyam version straight into a variable, but this works so I didn't want to change it.</div>
+<note>Note: I really don't know why I didn't just save the Wyam version straight into a variable, but this works so I didn't want to change it.</note>
 
 
 The `pages` section is a special section and must be named this way for GitLab to deploy your site to GitLab Pages.

@@ -11,9 +11,9 @@ tags = ["Guacamole", "RDP", "Remote Desktop", "Remote Access"]
 categories = ["Lessons"]
 +++
 
-<div class="note">
+<note>
 NOTE: This post has some bugs in it that I haven't had the time to identify and fix. These instructions do not work 100% as intended, and you may not have a working installation just by following this post. If you manage to identify the problems, please let me know in the comments.
-</div>
+</note>
 
 There have been many times I've needed to access my home computers but did not have the ability to use SSH or RDP, usually because those technologies end up blocked wherever I am. I already have the capability to VPN into my network, but there are times and locations where that technology gets blocked too. The one technology that never gets blocked (unless you live in a country that censors the internet) is standard web pages running on ports 80 or 443.
 
@@ -58,7 +58,7 @@ docker swarm init
 
 Now you have a fancy swarm of one docker node. You can feel free to add more if you want, but for this purpose it's not needed and may add complexity to your setup.
 
-<div class="note">Note: Without the correct configuration, running more than one node can cause your containers to auto-balance over to other nodes and be unable to communicate properly with each other, or to auto-scale and cause file or database corruption. I'm not providing instructions for all that, so stick with one node unless you know what you're doing.</div>
+<note>Note: Without the correct configuration, running more than one node can cause your containers to auto-balance over to other nodes and be unable to communicate properly with each other, or to auto-scale and cause file or database corruption. I'm not providing instructions for all that, so stick with one node unless you know what you're doing.</note>
 
 # Create the Docker Stack Configuration File
 Next a configuration is needed file to tell docker what to do when starting up the stack. Copy the text below and paste it into a text editor of some sort and save it as `~/guacamole/guacamole-stack.yml`. From the command line you can type either of these:

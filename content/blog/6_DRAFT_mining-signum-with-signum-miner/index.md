@@ -46,7 +46,7 @@ Make the `engraver_cpu` file executable by typing `chmod +x engraver_cpu`. This 
 | Free disk space in kb    | Type `df -BK /mnt/burst-disk`, changing the path to match your own desired plot file location. Record the amount under the `Available` column.                                                                       |
 | Number of nonces to plot | Divide the free space in kb by 256. Example: `1367753384 kb / 256 = 5342786 nonces`                                                                                                                                  |
 
-<div class="note">Note: If you don't intend to use the entire drive, record the free disk space as the amount you wish to use in kilobytes.</div>
+<note>Note: If you don't intend to use the entire drive, record the free disk space as the amount you wish to use in kilobytes.</note>
 
 Now that you have the required information, it's time to start engraving your plot files. Start by creating a folder on your drive where you want to store the plots. It's suggested to store them in a folder rather than on the root of the drive.
 
@@ -70,7 +70,7 @@ Once you execute the command, engraver will start creating your plot files. This
 
 Wait until the plotting is complete, then move on to mining.
 
-<div class="note">Note: If your engraver dies or you need to quit it early, worry not! Engraver is smart enough to pick up where it left off. To get this behavior, however, you DO need to type the exact same command you did the first time. If you make a mistake in the numbers or ID, it'll start a brand new plot file.</div>
+<note>Note: If your engraver dies or you need to quit it early, worry not! Engraver is smart enough to pick up where it left off. To get this behavior, however, you DO need to type the exact same command you did the first time. If you make a mistake in the numbers or ID, it'll start a brand new plot file.</note>
 
 # Get Those Scavenging Gloves On
 

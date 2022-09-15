@@ -137,7 +137,7 @@ Open the windows calculator and go to Programmer mode. Ensure DEC mode is select
 
 Repeat this for each octet in your IP address, writing down each hex value.
 
-<div class="note">Note: If you are using the older version of calculator (before the Windows Universal Apps version), you may need to click the HEX radio button to see it converted.</div>
+<note>Note: If you are using the older version of calculator (before the Windows Universal Apps version), you may need to click the HEX radio button to see it converted.</note>
 
 Once you have all the hexadecimal octets, you need to enter them into the Binary section of the Data Entry box. Just type the numbers in the order of the octets. An IP of `10.10.10.2`, for instance, would be entered as `0A 0A 0A 02`. Click OK to close the Scope Options window.
 

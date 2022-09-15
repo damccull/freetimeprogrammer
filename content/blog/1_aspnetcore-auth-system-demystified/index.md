@@ -11,9 +11,9 @@ tags = ["ASP.Net Core"]
 categories = ["Lessons"]
 +++
 
-<div class="note">
+<note>
     This post was updated on 18 April 2018 at 22:18. Please see the changelog at the bottom for details.
-</div>
+</note>
 
 There is a component that exists in ASP.NET Core that conjures up an enchanted shield that protects portions (or all) of your website from unauthorized access. Like many people, I have used this component from the beginning of my journey, but have never understood it. It was conjured up by a wizard and provided a magical barrier between my website and the world. That’s not how it really works, of course, but without the right knowledge, it might as well.
 
@@ -64,7 +64,7 @@ To sum up, a `ClaimsPrincipal` represents a user and contains one or more instan
 There are 5 verbs (these can also be thought of as commands or behaviors) that are invoked by the auth system, and are not necessarily called in order. These are all independent actions that do not communicate among themselves, however, when used together allow users to sign in and access pages otherwise denied. Here is a very brief description of what each verb is responsible for. We’ll go into more depth further in the article.
 
 
-<div class="note">Note: These are behaviors, not methods (although there are methods of the same names implementing these behaviors).</div>
+<note>Note: These are behaviors, not methods (although there are methods of the same names implementing these behaviors).</note>
 
 * *Authenticate*
   * Gets the user’s information if any exists (e.g. decoding the user’s cookie, if one exists)
@@ -106,7 +106,7 @@ Here is an example flow for cookies authentication:
 
 ## Code Example
 
-<div class="note">NOTE: You can access and download the source code for this example app at <a href="https://gitlab.com/free-time-programmer/tutorials/demystify-aspnetcore-auth/tree/master" target="\_new">https://gitlab.com/free-time-programmer/tutorials/demystify-aspnetcore-auth/tree/master</a>.</div>
+<note>NOTE: You can access and download the source code for this example app at <a href="https://gitlab.com/free-time-programmer/tutorials/demystify-aspnetcore-auth/tree/master" target="\_new">https://gitlab.com/free-time-programmer/tutorials/demystify-aspnetcore-auth/tree/master</a>.</note>
 
 This example is not intended to be a fully functional web application. It uses a simple POCO to store usernames and passwords, is not a secure or functional way of writing a web application, and does not guarantee proper execution outside of the simple cases of signing in and out. The intention is to illustrate the authentication flow through a code example. In this example I've removed all code unrelated to the topic.
 

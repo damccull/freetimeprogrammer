@@ -1,12 +1,17 @@
-.note {
-    margin-bottom:25px;
-    margin-left:auto;
-    margin-right:auto;
-    border:1px dashed var(--accent);
+note {
+    display: block;
+    margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px dashed var(--accent);
     border-radius: 0px;
     background-color: var(--background);
     padding: 5px;
-    font-size:.8em;
+    font-size: .8em;
     //font-family: sans-serif;
-    width:85%;
+    width: 85%;
+}
+
+datetime {
+    color: var(--accent);
 }

@@ -51,7 +51,7 @@ theme_color = "blue"
 
 # How many menu items to show on desktop. if you set this to 0, only submenu
 # button will be visible.
-show_menu_items = 3
+show_menu_items = 5
 
 # set theme to full screen width.
 full_width = false
@@ -80,8 +80,8 @@ main_menu = [
     { url = "@/_index.md", name = "home" },
     { url = "@/about/index.md", name = "about" },
     { url = "@/comment_policy/index.md", name = "comment policy" },
-    { url = "/tags", name = "tags" },
     { url = "/categories", name = "categories" },
+    { url = "/tags", name = "tags" },
 ] # Menu items to display. You define a url and the name of the menu item.
 # NOTE: `$BASE_URL/` must be included in the url name.
 

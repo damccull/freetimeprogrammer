@@ -27,7 +27,7 @@ Some of these will be rust standard crates but most will probably be 3rd party c
 
 ### Async Runtimes
 
-#### tokio - event-driven, non-blocking I/O platform
+#### `tokio` - event-driven, non-blocking I/O platform
 
 [[link](https://crates.io/crates/tokio)]
 
@@ -35,13 +35,13 @@ tokio is an async runtime framework. Rust only offers the basic building blocks 
 
 ### Networking
 
-#### h2 - low level HTTP/2 implementation
+#### `h2` - low level HTTP/2 implementation
 
 [[link](https://crates.io/crates/h2)]
 
 h2 calls itself "a Tokio aware, HTTP/2 client & server implementation for Rust". It is not designed to act as a web server itself, though it can be used that way, but instead it's an implementation of the HTTP/2 specification that is very useful for building other frameworks on top.
 
-#### reqwest
+#### `reqwest` - higher level HTTP client library
 
 [[link](https://crates.io/crates/reqwest)]
 
@@ -49,7 +49,7 @@ An http client used for making requests over the http protocol. It is easy to us
 
 ### Path and URI Manipulation
 
-#### camino - Unicode Path Types
+#### `camino` - Unicode Path Types
 
 [[link](https://crates.io/crates/camino)]
 
@@ -59,13 +59,13 @@ This is a useful crate for path manipulation on modern systems where you know th
 
 ### Web Servers
 
-#### actix_web - async web server
+#### `actix_web` - async web server
 
 [[link](https://crates.io/crates/actix-web)]
 
 Actix Web claims to be a "Actix Web is a powerful, pragmatic, and extremely fast web framework for Rust". I have personally found it to be just that. It can be a bit difficult to understand at first but its power and speed are great and it works great with the tokio crate. Despite its speed it has a ton of built-in features and a massive support from 3rd party crates.
 
-#### axum - async web server
+#### `axum` - async web server
 
 [[link](https://crates.io/crates/axum)]
 
@@ -75,17 +75,17 @@ This web server integrates seamlessly with the tower crate because it's built on
 
 Lastly, this crate is a member of the tokio family of crates. It is well maintained and actively developed.
 
-#### hyper - low-level HTTP library
+#### `hyper` - low-level HTTP library
 
 [[link](https://crates.io/crates/hyper)]
 hyper is a low-level HTTP library used as a building block for other libraries. It is included here only because I regularly see example code for web servers that uses hyper directly rather than a more full-fledged web server framework.
 
-#### rocket - highly-opinionated web server framework
+#### `rocket` - highly-opinionated web server framework
 
 [[link](https://crates.io/crates/rocket)]
 Rocket focuses on ease of use and security. It's very extensible and pretty quick. It uses the tokio runtime for async operations as of version 0.5. It does not yet support websockets.
 
-#### warp - very fast, fairly simple web server
+#### `warp` - very fast, fairly simple web server
 
 [[link](https://crates.io/crates/warp)]
 build on top of hyper, warp calls itself "a super-easy, composable, web server framework for warp speeds". It competes with actix in terms of speed and features but has a fundamentally different approach to setting up routing and passing the request through its infrastructure. It works very well with the tokio crate and has fairly decent 3rd party library support.

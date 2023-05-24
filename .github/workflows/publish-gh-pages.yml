@@ -24,19 +24,6 @@ concurrency:
 
 name: Build and Deploy GH Pages
 jobs:
-  # build:
-  #   name: Publish site
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout main
-  #       uses: actions/checkout@v3.0.0
-  #     - name: Build and deploy
-  #       uses: shalzz/zola-deploy-action@v0.17.2
-  #       env:
-  #         # Target branch
-  #         PAGES_BRANCH: gh-pages
-  #         # Provide personal access token
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build:
     name: Build Site with Zola
     runs-on: ubuntu-latest

@@ -2,8 +2,6 @@
 title = "comment policy"
 path = "comment-policy"
 aliases = ["/comment-policy.html"]
-[extra]
-#Keep date here in extra section to avoid indexing on homepage
 date = 2021-04-30
 +++
 

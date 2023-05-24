@@ -78,8 +78,8 @@ logo_home_link = "/"
 
 main_menu = [
     { url = "@/_index.md", name = "home" },
-    { url = "@/about/index.md", name = "about" },
-    { url = "@/comment_policy/index.md", name = "comment policy" },
+    { url = "@/about/_index.md", name = "about" },
+    { url = "@/comment_policy/_index.md", name = "comment policy" },
     { url = "/categories", name = "categories" },
     { url = "/tags", name = "tags" },
 ] # Menu items to display. You define a url and the name of the menu item.

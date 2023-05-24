@@ -43,6 +43,8 @@ jobs:
     steps:
       - name: Checkout main
         uses: actions/checkout@v3.0.0
+        with:
+          submodules: true
       - name: Install zola
         uses: taiki-e/install-action@v2
         with:

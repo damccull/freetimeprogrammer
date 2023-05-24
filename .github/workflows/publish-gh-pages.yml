@@ -52,7 +52,6 @@ jobs:
       - name: Build site
         run: |
           echo "BUILDING SITE"
-          ls -al
           zola build -o _site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

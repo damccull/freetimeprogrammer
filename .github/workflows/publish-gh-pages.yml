@@ -43,10 +43,11 @@ jobs:
     steps:
       - name: Checkout main
         uses: actions/checkout@v3.0.0
-      - uses: taiki-e/install-action@v2
+      - name: Install zola
+        uses: taiki-e/install-action@v2
         with:
           tool: zola@${{ env.ZOLA_VERSION }}
-      - name: Install zola
+      - name: Build site
         run: |
           echo "BUILDING SITE"
           zola build -o _site

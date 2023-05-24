@@ -1,7 +1,7 @@
 +++
 title = "Rust Crates Every Developer Needs to Know"
 date = 2022-05-04T13:08:00Z
-updated = 2032-05-24T03:32:00Z
+updated = 2023-05-24T03:32:00Z
 
 description = "A list of useful crates for the rust programming language."
 aliases = ["/blog/rust-crates-every-developer-should-know/"]

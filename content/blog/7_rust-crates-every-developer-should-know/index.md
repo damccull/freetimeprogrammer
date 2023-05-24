@@ -27,7 +27,7 @@ Some of these will be rust standard crates but most will probably be 3rd party c
 
 ### Async Runtimes
 
-#### `tokio` - event-driven, non-blocking I/O platform
+#### `tokio` - event-driven, non-blocking I/O platform {#tokio}
 
 [[link](https://crates.io/crates/tokio)]
 
@@ -73,7 +73,7 @@ Axum calls itself "a web application framework that focuses on ergonomics and mo
 
 This web server integrates seamlessly with the tower crate because it's built on top of it. That allows users to automatically use any of the pre-existing tower middlewares right in their webserver.
 
-Lastly, this crate is a member of the tokio family of crates. It is well maintained and actively developed.
+Lastly, this crate is a member of the [tokio](#tokio) family of crates. It is well maintained and actively developed.
 
 #### `hyper` - low-level HTTP library
 

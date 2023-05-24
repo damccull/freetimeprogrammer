@@ -71,9 +71,9 @@ Actix Web claims to be a "Actix Web is a powerful, pragmatic, and extremely fast
 
 Axum calls itself "a web application framework that focuses on ergonomics and modularity". I used it to run through the book _Zero to Production in Rust_ and found it to be a joy to use. It is similar to actix_web in configuration but has a very different error handling model.
 
-This web server integrates seamlessly with the `tower` crate because it's built on top of it. That allows users to automatically use any of the pre-existing `tower` middlewares right in their webserver.
+This web server integrates seamlessly with the tower crate because it's built on top of it. That allows users to automatically use any of the pre-existing tower middlewares right in their webserver.
 
-Lastly, this crate is a member of the `tokio` family of crates. It is well maintained and actively developed.
+Lastly, this crate is a member of the tokio family of crates. It is well maintained and actively developed.
 
 #### hyper - low-level HTTP library
 

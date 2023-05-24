@@ -1,0 +1,18 @@
+{
+    "markdownlint.config": {
+        "MD033": {
+            "allowed_elements": [
+                "note",
+                "img",
+                "a",
+                "table",
+                "tr",
+                "th",
+                "td",
+                "ul",
+                "li",
+                "datetime"
+            ]
+        }
+    }
+}

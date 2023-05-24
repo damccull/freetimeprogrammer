@@ -9,13 +9,16 @@ tags = ["Ubiquiti", "UniFi", "Networking",]
 categories = ["Lessons"]
 +++
 
-# Introduction
+## Introduction
+
 UniFi Access Points (APs) and other devices are fantastic, but can be difficult to adopt from a UniFi Controller if they never show up. Many different DHCP servers can be configured to tell the devices where the Controller is. You can learn to configure several DHCP servers [here][other-dhcp-stuff] but, to my knowledge, no one has yet written a tutorial on how to do this with Windows DHCP Server. This article aims to teach you just how to do that.
 
 Cisco's document on setting up DHCP option 43 for their branded devices was invaluable to my understanding. Similarly, Ubiquiti's own document on the adoption of remote devices by a UniFi Controller provided the rest of the information I needed. Armed with these two articles I set about experimenting, and ended up successfully adopting devices on a separate network from the controller.
 
-# Prerequisites
+## Prerequisites
+
 This article assumes these to be true:
+
 * You have a working network with two separate subnets
 * A Windows Server handles all DHCP requests for the networks
 * You are not using the router's built in DHCP server
@@ -23,8 +26,10 @@ This article assumes these to be true:
 
 If you have not met these prerequisites, this will not likely work for you. Setting up these requirements is beyond the scope of this article, but [YouTube](https://youtube.com) has a ton of videos on how to set these devices up in any fashion you wish.
 
-# The Weeds
+## The Weeds
+
 ### Understanding Things
+
 Let's get into the nitty and the gritty. The first thing to understand is some terminology. There is a fancy text string called a Vendor Class Identifier (VCI), which some network devices transmit as part of their DHCP request, in option 60. When the DHCP server receives a request that contains an option 60, it reads the VCI and checks against its defined Vendor Classes to see if that VCI exists in its database.
 
 Assuming the Vendor Class exists, the DHCP server will add all vendor specific scope options for the specified VCI to the generic options it's already sending. These vendor specific suboptions will be combined into a single Option 43 when sent to the requestor.
@@ -100,7 +105,8 @@ This additional option would bring the entire set of options to this:
 
 All these options, in addtion to an IP address, would be sent to the device that originally include an option 60 value of `ubnt` in its DHCP request. In fact, this is exactly what we're going to make the Windows DHCP server do.
 
-### Windows DHCP Server Configuration 
+### Windows DHCP Server Configuration
+
 Open up the DHCP control panel. In Windows Server 2012 and higher, do this from Server Manager by clicking Tools, then DHCP.
 
 <img src="dhcp-control-panel.png" />
@@ -145,10 +151,12 @@ Once you have all the hexadecimal octets, you need to enter them into the Binary
 
 Reboot your APs and watch them magically appear in your UniFi Controller.
 
-# Conclusion
+## Conclusion
+
 Getting your UniFi devices working with a controller on another network can be a bit of a challenge. All the tools needed already exist in one form or another, however, and with just a little research and guidance it shouldn't be too difficult to get yours set up. The bonus to using this method, from what I understand, is that the Ubiquiti Option 43 we created in this tutorial will not be offered unless it's requested via option 60.
 
-# References
+## References
+
 This is a APA formatted list of references I used to get my own server up and running properly, and to write this article.
 
 Cisco. (2018, February 08). DHCP OPTION 43 for Lightweight Cisco Aironet Access Points Configuration Example. Retrieved March 10, 2018, from [https://www.cisco.com/c/en/us/support/docs/wireless-mobility/wireless-lan-wlan/97066-dhcp-option-43-00.html](https://www.cisco.com/c/en/us/support/docs/wireless-mobility/wireless-lan-wlan/97066-dhcp-option-43-00.html)

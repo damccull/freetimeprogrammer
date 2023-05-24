@@ -19,14 +19,16 @@ There have been many times I've needed to access my home computers but did not h
 
 Apache has a technology that acts as an RDP, ssh, and VNC gateway, presenting the connection via a web page. It's fully interactive, gives complete control over the computers in question and, if set up insecurely, can leave a big hole in your network for attackers. In this article, I'll show you how to set up your own Guacamole instance using Docker Stack that will give you secure access to your home network over HTTPS with full RDP and ssh capability.
 
-# Stuff you have to do first
+## Stuff you have to do first
+
 Here are some prerequisites:
 
 1. Download and install your favorite linux distribution on a computer you'll use a server. I am using Ubuntu 20.04 LTS.
 2. Install Docker. Do not use the Snap package as it does not work for this. Install Docker using [their official installation instructions][docker-install-instructions]. Here's a shortcut to the [Ubuntu installation instructions][docker-install-instructions-ubuntu]
 3. Install OpenSSL however your distribution does it.
 4. Set up this folder structure in your home folder (names ending with a slash are folders):
-```
+
+```text
 guacamole/
 |-guacamole_postgres_database/
 |-guacamole-stack.yml
@@ -36,7 +38,8 @@ guacamole/
 ```
 
 You don't have to precreate all of these files and folders, but it will be more convenient to do it now. To create a folder you can type `mkdir <foldername>` and to create an empty file you can type `touch <filename>`. For instance, you can run the following commands to set up the folder structure shown above:
-```
+
+```text
 mkdir ~/guacamole
 mkdir ~/guacamole/guacamole_postgres_database
 touch ~/guacamole/guacamole-stack.yml
@@ -47,12 +50,13 @@ touch ~/guacamole/initdb.sql
 
 All files and folders in this tutorial will be referenced by their relation to your home directory. Your home directory in linux is represented as a shortcut with the `~` character. Thus, an example path would be `~/guacamole/guacamole-stack.yml`. This should cut down on the confusion of which file to work with.
 
-# Set Up Docker
+## Set Up Docker
+
 We're going to be using a neat technology Docker calls Docker Stack. I recommend you pause here and take a few minutes to [run through this very quick tutorial][docker-get-started] on their website to understand the basics of Docker.
 
 Now that you're back, let's get started. First, enable docker swarm mode. You're going to have only a single node in your swarm, but this enables the ability for docker stack to work, as well.
 
-```
+```text
 docker swarm init
 ```
 
@@ -60,9 +64,9 @@ Now you have a fancy swarm of one docker node. You can feel free to add more if 
 
 <note>Note: Without the correct configuration, running more than one node can cause your containers to auto-balance over to other nodes and be unable to communicate properly with each other, or to auto-scale and cause file or database corruption. I'm not providing instructions for all that, so stick with one node unless you know what you're doing.</note>
 
-# Create the Docker Stack Configuration File
-Next a configuration is needed file to tell docker what to do when starting up the stack. Copy the text below and paste it into a text editor of some sort and save it as `~/guacamole/guacamole-stack.yml`. From the command line you can type either of these:
+## Create the Docker Stack Configuration File
 
+Next a configuration is needed file to tell docker what to do when starting up the stack. Copy the text below and paste it into a text editor of some sort and save it as `~/guacamole/guacamole-stack.yml`. From the command line you can type either of these:
 
 ```Dockerfile
 version: '3.7'
@@ -199,15 +203,16 @@ Nested under each service declaration is the configuration for that service. Eac
 
 * `image:` this key defines the docker image to use
 * `deploy:` this key defines how to deploy the service
-    * `replicas:` the number of replicas; 1 in this case because we don't need more
-    * `placement:` defines which node to run it on; if there's more the one node, these will run on the master node
-    * `restart_policy:` how to handle auto-restarts; in this case they'll restart if they fail
+  * `replicas:` the number of replicas; 1 in this case because we don't need more
+  * `placement:` defines which node to run it on; if there's more the one node, these will run on the mastenode
+  * `restart_policy:` how to handle auto-restarts; in this case they'll restart if they fail
 * `environment:` contains environment variables that will be exposed to the software running inside the container
 * `volumes:` contains an array of docker volume maps; folders on the host that should be visible in certain locations in the container
 * `ports:` any ports on the container that need to be exposed from the host server; going to the host's ip on port 80, for instance, will be redirected to the container's port 80
 * `networks:` a list of the virtual docker networks the containers should be able to talk to
 
-## Traefik labels
+### Traefik labels
+
 Traefik's labels get their own section because they're a bit difficult to understand at first and it makes sense to separate this from the generic docker-compose language. Each label that begins with `traefik` will be read by the reverse proxy and compared to an internal directory of labels to see if they match. If so, it will execute the function associated with that label.
 
 Traefik, in this instance, is set up to act as a proxy for the guacamole front end and any other containers that are properly labeled (including itself, it set up properly). It will ignore any container without the enable label because of a command line option specified in the traefik container's definition: `--providers.docker.exposedByDefault=false`.
@@ -216,14 +221,15 @@ I will not go into specifics on how traefik works in general; that's for [their 
 
 These three lines configure the container to be recognized by traefik, use an entrypoint (an open connection listening for connections), and define that this container should be associated with the address 'g.mydomain.com'. In this case, the 'mydomain.com' portion is replaced with a variable that will be set by a script.
 
-```
+```text
 - "traefik.enable=true"
 - "traefik.http.routers.guacamole.entrypoints=web"
 - "traefik.http.routers.guacamole.rule=Host(`g.${DOMAIN?Variable DOMAIN not set}`)"
 ```
 
 These next 5 lines set up an https version and tell the http address to automatically redirect to the https address, ensuring that any connections will be secure.
-```
+
+```text
 - "traefik.http.middlewares.guacamole-https-redirect.redirectscheme.scheme=https"
 - "traefik.http.routers.guacamole.middlewares=guacamole-https-redirect"
 - "traefik.http.routers.guacamole-secure.entrypoints=websecure"
@@ -233,32 +239,35 @@ These next 5 lines set up an https version and tell the http address to automati
 ```
 
 These two lines define which network and port number traefik should forward traffic to. In this case, any connections to traefik's port 80 will immediately be redirected to traefik's 443, which will then be reverse proxied to the guacamole front end's port 8080 via the internal-only network  
-```
+
+```text
 - "traefik.http.services.guacamole.loadbalancer.server.port=8080"
 - "traefik.docker.network=guacamole-net"
 ```
 
 This line is optional and will enable this container to automatically pull a letsencrypt certificate. This part is beyond the scope of this tutorial at this time.
-```
+
+```text
 - "traefik.http.routers.guacamole-secure.tls.certresolver=letsencrypt"
 ```
 
 At this point the docker portion is complete.
 
-# Postgres Configuration
+## Postgres Configuration
+
 Next up is the database. Guacamole needs somewhere to store data, after all. I've chosen postgres because it works very well in this docker solution. Guacamole also supports mysql but I had problems getting it to connect because of an SSL inconsistency when using the latest versions of everything.
 
 Configuring Postgres is going to require creating or obtaining a script that will create the schema in the databse, the manually running a postgres container with the same volume mounted we'll eventually use, and finally to execute the script inside that temporary setup container.
 
 Start by generating the script like this:
 
-```
+```text
 docker run --rm guacamole/guacamole /opt/guacamole/bin/initdb.sh --postgres > ~/guacamole/initdb.sql
 ```
 
 You should now have a file in the folder where you ran this command called `initdb.sql`. Now we need to run a temporary, one-time-use postgresql container to get the database set up.
 
-```
+```text
 docker run --rm --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v ~/guacamole/guacamole_postgres_database:/var/lib/postgresql/data -v ~/guacamole/initdb.sql:/initdb.sql postgres
 ```
 
@@ -274,13 +283,13 @@ This command starts a docker container running a postgres server that:
 
 Next, to avoid installing postgres on your computer just to use the client once, run the command directly inside the server container. This command may fail a few times until the postgresql server fully comes online. Just give it a minute, then run this:
 
-```
+```text
 docker exec -it pg-docker psql -U postgres
 ```
 
 At this point you should be at a command prompt that likely looks different than normal. Should you see something similar to `postgres=#` for your prompt, you've done it right and are connected to the database. Import the database schema with:
 
-```
+```text
 docker exec -it pg-docker createdb -U postgres guacamole_db
 docker exec -it pg-docker psql -U postgres -d guacamole_db
 \i /initdb.sql
@@ -292,7 +301,7 @@ The last command in that list populates its schema from commands in the file you
 
 Next, we need to create a guacamole user. Just like running as root or an admin is not a good idea on a computer, running as the 'postgres' user is not a good idea in the database.
 
-```
+```text
 # If you're still in the shell, skip this command
 docker exec -it pg-docker psql -U postgres -d guacamole_db
 
@@ -306,13 +315,14 @@ This first creates a user with the password 'somepassword' (no quotes). Change t
 
 Lastly, for this section, clean up the docker container you used. We're done with it. Don't worry, because we mapped a volume to the postgresql data directory, the databases are safe on your host filesystem.
 
-```
+```text
 docker stop pg-docker
 ```
 
 With this command the container will stop and be deleted beceause of the `--rm` portion of the command you ran it with. Running `docker ps -a` will not show the pg-docker container anymore.
 
-# Kick it All Off with a Script
+## Kick it All Off with a Script
+
 You can run this stack manually with the `docker stack deploy -c ~/guacamole/guacamole-stack.yml` command, but that would require you to manually preset some variables we are using in the yml file. It would also be more tedius to type than `./run_guacamole.sh` and isn't guaranteed to be the same every time unless you're very careful in how you type it. Therefore, we will use the script `run_guacamole.sh` to turn this stack on.
 
 ```bash
@@ -333,7 +343,8 @@ This script sets some variables that will be needed by the docker file and this 
 * `--with-registry-auth` spreads registry authentication around to swarm agents. In this case there's only one node in the swarm so this probably doesn't matter.
 * `--prune` will automatically remove containers that get removed from the docker yml file (guacamole-stack.yml) when you run this script again. The default behavior with this is to just let the existing containers keep running and is undesirable for this purpose.
 
-# Run it Always, Even After Reboots
+## Run it Always, Even After Reboots
+
 Now that you have a fancy new guacamole stack set up, it needs to be started. More than that, though, it needs to start every time you reboot your computer, automatically and without thought on your part. Because sysadmins are lazy.
 
 Type `crontab -e` into your shell and it will open your personal crontab in an editor. Type this into the bottom of the file, then save and exit:
@@ -352,9 +363,9 @@ cd ~/guacamole
 ./run_guacamole.sh
 ```
 
-# Conclusion
-Setting up a fancy, web-browser-based remote access system can be a difficult thing to understand and require a lot of maintenance. Or you can learn a bit of Docker Swarm and dockerize the crap out of it. I hope you found this useful and it works for you. Feel free to leave your feedback in the comments.
+## Conclusion
 
+Setting up a fancy, web-browser-based remote access system can be a difficult thing to understand and require a lot of maintenance. Or you can learn a bit of Docker Swarm and dockerize the crap out of it. I hope you found this useful and it works for you. Feel free to leave your feedback in the comments.
 
 [docker-install-instructions]: https://docs.docker.com/install/ "Docker Install Instructions"
 [docker-install-instructions-ubuntu]: https://docs.docker.com/install/linux/docker-ce/ubuntu/ "Docker Install Instructions for Ubuntu"

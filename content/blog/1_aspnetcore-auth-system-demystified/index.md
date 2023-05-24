@@ -33,7 +33,7 @@ A *Claim* represents a single fact about the user. It could be the user's first 
 
 Claims are represented by the `Claim` class in ASP.Net Core. It's most common constructor accepts two strings: type and value. The 'type' parameter is the name of the claim, while the value is the information the claim is representing about the user.
 
-This code will create two new claims. One of type 'FullName' with a value of 'Dark Helmet', and a second of type `ClaimTypes.Email` and a value of 'dark.helmet@spaceballs.com'. There is a ClaimsType class that contains many string constants that represent industry standard claim types. These are all in URI format, but claim types can be any string.
+This code will create two new claims. One of type 'FullName' with a value of 'Dark Helmet', and a second of type `ClaimTypes.Email` and a value of `dark.helmet@spaceballs.com`. There is a ClaimsType class that contains many string constants that represent industry standard claim types. These are all in URI format, but claim types can be any string.
 
 ```cs
 //This claim uses a standard string
@@ -62,7 +62,6 @@ To sum up, a `ClaimsPrincipal` represents a user and contains one or more instan
 ## Verbs
 
 There are 5 verbs (these can also be thought of as commands or behaviors) that are invoked by the auth system, and are not necessarily called in order. These are all independent actions that do not communicate among themselves, however, when used together allow users to sign in and access pages otherwise denied. Here is a very brief description of what each verb is responsible for. We’ll go into more depth further in the article.
-
 
 <note>Note: These are behaviors, not methods (although there are methods of the same names implementing these behaviors).</note>
 
@@ -110,7 +109,8 @@ Here is an example flow for cookies authentication:
 
 This example is not intended to be a fully functional web application. It uses a simple POCO to store usernames and passwords, is not a secure or functional way of writing a web application, and does not guarantee proper execution outside of the simple cases of signing in and out. The intention is to illustrate the authentication flow through a code example. In this example I've removed all code unrelated to the topic.
 
-#### class Startup
+### class Startup
+
 When the app first starts it triggers the ConfigureServices() and Configure() methods in the Startup class. In aspnetcore 2.0 authentication handlers are registered and configured entirely in the ConfigureServices method, and there is a single call to turn them all on in the Configure method.
 
 ```cs
@@ -153,7 +153,7 @@ public class ApplicationUser {
 }
 ```
 
-#### class AccountController
+### class AccountController
 
 In order to do anything meaningful with the authentication middleware and handler, some actions are needed. Below is an MVC Controller called `AccountController` which contains methods that do the work of signing in and out. This class handles the verbs *SignIn* and *SignOut* through the HttpContext's convenience methods, which in turn invoke the `SignInAsync` and `SignOutAsync` methods on the specified or default auth handler.
 
@@ -215,6 +215,7 @@ public List<ApplicationUser> Users => new List<ApplicationUser>() {
 ```
 
 There are also two overloaded `Login` methods. The first one takes a string `returnUrl` and stores it in the controller's `TempData` repository. It then returns the default view for the action.
+
 ```cs
 public IActionResult Login(string returnUrl = null) {
     TempData["returnUrl"] = returnUrl;
@@ -254,6 +255,7 @@ await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
 ```
 
 Lastly, the method determines the returnUrl, if any, and redirects the user to either the returnUrl or the home page if there isn't one.
+
 ```cs
 if(returnUrl == null) {
     returnUrl = TempData["returnUrl"]?.ToString();
@@ -265,7 +267,7 @@ if(returnUrl != null) {
 return RedirectToAction(nameof(HomeController.Index), "Home");
 ```
 
-#### Login.cshtml
+### Login.cshtml
 
 The `AccountController` exists, but the users need a way to see the login form and send their credentials to the `Login` action of the controller. This view will solve both of those problems.
 
@@ -281,7 +283,8 @@ The `AccountController` exists, but the users need a way to see the login form a
 }
 ```
 
-#### class HomeController
+### class HomeController
+
 Now that there is an AccountController to log users in and out, there must be something that uses it. This is the `HomeController`'s Members method. Notice the `[Authorize]` attribute has been added.
 
 ```cs
@@ -290,9 +293,11 @@ public IActionResult Members() {
     return View();
 }
 ```
+
 The `[Authorize]` attribute decorating this action method will cause the authorization filter to run. That filter will determine if a user has been authenticated and, if not, issue the *Challenge* verb through the authentication handler, which will prompt the user to log in.
 
-#### Members.cshtml
+### Members.cshtml
+
 With almost any new controller action, a view will be needed to show the user something. This is what the Members view looks like behind the curtains.
 
 ```cs
@@ -306,7 +311,7 @@ With almost any new controller action, a view will be needed to show the user so
 
 ```
 
-#### \_Layout.cshtml
+### \_Layout.cshtml
 
 Lastly, a link or button to let the user click to log in or out would be very helpful. The aspnetcore templates tend to use a logout form that contains a link that uses javascript to submit the form with the http POST method. This is likely more secure than the example in the code below, but for the purposes of this example, a simple link and http GET will suffice.
 
@@ -323,8 +328,6 @@ The following code was added to the bootstrap menu in the \_Layout.cshtml file a
 ## Conclusion
 
 The auth system is interesting and well designed. It's very extensible and will easily work with custom authentication handlers. Understanding how this system works under the hood is the first step in using it beyond the template defaults. All kinds of custom authentication processes are possible by using the components themselves instead of just relying on the templates and convenience methods. Now go write code.
-
-[source-code-link]: https://gitlab.com/free-time-programmer/tutorials/demystify-aspnetcore-auth "Get the source code"
 
 ## Changelog
 

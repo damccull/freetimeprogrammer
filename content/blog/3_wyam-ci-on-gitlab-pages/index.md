@@ -1,7 +1,7 @@
 +++
 title = "Using Wyam on GitLab Pages with Continuous Integration"
 date = 2018-05-03T02:10:00Z
-update = 2021-04-30T20:52:00Z
+update = 2023-05-23T20:40:00Z
 description = "Learn to automatically generate and upload your Wyam site to GitLab Pages with only a git push."
 aliases = ["/posts/wyam-ci-on-gitlab-pages.html"]
 
@@ -11,15 +11,24 @@ categories = ["Lessons"]
 +++
 
 <note>
-    NOTE: Wyam has been supersceded by a project called Statiq. This post is not necessarily accurate any longer and the instructions may or may not work. They will probably not work at all for Statiq.
+  <ul>
+    <li>
+      NOTE: Wyam has been supersceded by a project called Statiq. This post is not necessarily accurate any longer and the instructions may or may not work. They will probably not work at all for Statiq.
+    </li>
+    <li>
+      This article is old. I no longer use gitlab or wyam/statiq. These instructions may no longe work.
+    </li>
+  </ul>
 </note>
 
-# Introduction
+## Introduction
+
 Continuous Integration with Wyam is a quest many have considered and promptly rejected because...it's hard. It's not natively supported on many platforms because it doesn't run on linux. At least not at the time of this article's publication. But take heart, brave adventurer, for all is not lost! Two possibilites exist to triumph in your quest: either wait for .NET Core support or follow this very tutorial.
 
 Yes, you heard right! This short tutorial will have you continuously integrating your Wyam site into GitLab pages (and maybe other places with the right modifications (not covered here)) before you know it. Let's get started.
 
-# Act I - Setting Out on the Quest
+## Act I - Setting Out on the Quest
+
 First thing's first: I'm not going to hold your hand on every detail. You're a brave adventurer and you can handle a little RTFM and basic setup.
 
 Now, you need a [gitlab.com](https://gitlab.com) account. This will probably work on a self-hosted gitlab as well, but no promises. For this tutorial I recommend just signing up and testing it live.
@@ -30,21 +39,24 @@ Next you should [create a GitLab Pages repo][gitlab-pages] to store your generat
 
 Lastly, you will need a Windows computer of some kind, with 7-zip installed and on your PATH, to run all the fun on.
 
-# Act II - Meeting the Monster
+## Act II - Meeting the Monster
+
 Now that you have a GitLab account and a Pages repo set up in it, let's get to work.
 
-## Set up your GitLab Runner
+### Set up your GitLab Runner
+
 Download the Windows version of the GitLab runner executable to a Windows machine that you want to use to actually run this stuff and open a command prompt to the location you decide to keep it.
 
 You should, at this point, read the fine documentation on [Installing GitLab Runner on Windows][install-gitlab-runner], but just in case you are being extraordinarily lazy...
 
-```
+```text
 gitlab-runner.exe install
 gitlab-runner.exe start
 ```
+
 Above is recommended, but if you want to run NOT run it as the built in system account...
 
-```
+```text
 gitlab-runner.exe install --user <some.username> --password <that_user_password>
 gitlab-runner.exe start
 ```
@@ -64,13 +76,11 @@ Easy. Next we need to register it as a 'specific runner' with GitLab.
     1. Change `executor` to 'shell' if it's not already set that way
     2. Change `shell` to 'powershell'
 
-
 Now you have a runner for this repo. You can add this runner to other repos by registering it with the token from those repos.
 
-## Assemble your CI Configuration File
+### Assemble your CI Configuration File
 
 Next you need to configure a `.gitlab-ci.yml` file that will act as the spellbook for your runner to perform its magic. Here is the file. You can copy and paste it as-is or you can read on and understand how it works.
-
 
 ```yml
 before_script:
@@ -135,7 +145,6 @@ The `script` sub-section is where the Wyam site is actually generated. It's a se
 
 <note>Note: I really don't know why I didn't just save the Wyam version straight into a variable, but this works so I didn't want to change it.</note>
 
-
 The `pages` section is a special section and must be named this way for GitLab to deploy your site to GitLab Pages.
 
 The `stage`, `tags`, and `only` options are like above.
@@ -148,11 +157,11 @@ The `script` sub-section does the following:
 
 The `artifacts` sub-section defines what folders actually get uploaded back to the GitLab Pages site. Don't change the name from 'public' because the webserver looks for the 'public' folder to serve files from.
 
-# Act III - Achieve Greatness Among the People
+## Act III - Achieve Greatness Among the People
 
 The next time you push your master branch to the GitLab repo, it should kick off a pipeline, pushing the updated source to your runner, which will compile it into a static site and push it back to GitLab Pages.
 
-# Conclusion
+## Conclusion
 
 The life of a brave adventurer isn't for everyone, but you have achieved greatness. Setting up Wyam for CI, in its current, non-Core state, is not terribly difficult, but can require a bit of research, trial, and error. I have done most of those for you. You may encounter a problem or two, but I am confident you can figure it out.
 

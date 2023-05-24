@@ -9,13 +9,13 @@ tags = ["Signum", "Proof of Capacity"]
 categories = ["CryptoCurrency"]
 +++
 
-# So You Want to Mine Burstcoins?
+## So You Want to Mine Burstcoins?
 That's a great idea! The Burstcoin network needs to grow and become even more decentralized than it already is. The good news is that mining is super simple with the BTDEX app. It functions as a Burstcoin wallet; a decentralized, cross-chain exchange; and a plotter/miner. With this one tool, you can do it all. If that's all you want, read _[Mining with your Hard Drive in 2021][jjos-article]_ by one of the current Burstcoin developers, and then [go check out the BTDEX website][btdex]. While you're at it, [please click here to join the Burstcoin community on Discord][discord-join-link].
 
 BTDEX is a great choice to get started, but eventually most people want to stop running their critical mining infrastructure on their every day use PC. This article is about setting up a headless miner under any Linux distribution.
 
 
-# Setting Up the Disks
+## Setting Up the Disks
 To start mining, the first thing you will need is some free disk space. This is most easily accomplished by using your existing free space or, as I like to do, find or buy some old hard drives and plug them into the computer.
 
 This article isn't a tutorial on how to do all the Linux commands required to format, mount, and use a hard disk. Google things like 'linux format hard drive' and 'linux mount partition' for help with those things. What you need to know is:
@@ -26,7 +26,7 @@ This article isn't a tutorial on how to do all the Linux commands required to fo
 
 Once you've got all that done, it's time to get started.
 
-# Every ~~Story~~ Miner Needs a Plot
+## Every ~~Story~~ Miner Needs a Plot
 Just like every story needs a plot, so too does every Burstcoin miner. Well, at least one plot. Unlike telling a story, in Burstcoin you can have as many plots as you want. At this point you might be wondering: What exactly is a plot?
 
 In Burstcoin, a plot file is a collection of cryptographic hashes stored in a specific structure on your disk. I won't go into the nitty-gritty details of how it's structured or the details of creating the hashes. You only need to know that these about plot files:
@@ -72,17 +72,13 @@ Wait until the plotting is complete, then move on to mining.
 
 <note>Note: If your engraver dies or you need to quit it early, worry not! Engraver is smart enough to pick up where it left off. To get this behavior, however, you DO need to type the exact same command you did the first time. If you make a mistake in the numbers or ID, it'll start a brand new plot file.</note>
 
-# Get Those Scavenging Gloves On
-
-
-
+## Get Those Scavenging Gloves On
 
 [discord-join-link]: https://discord.gg/aBFeCNPgQd "Official Burstcoin Discord"
 [engraver-download]: https://github.com/PoC-Consortium/engraver/releases/latest "Latest engraver download"
 [scavenger-download]: https://github.com/PoC-Consortium/scavenger/releases/latest "Latest scavenger download"
 [btdex]: https://btdex.trade/ "BTDEX"
 [jjos-article]: https://jjos2372.medium.com/mining-with-your-hard-drive-in-2021-19d9f4a1368 "Mining with your Hard Drive in 2021"
-
 
 [signum-download]: https://github.com/signum-network/signum-node/releases/latest "Signum Downloads"
 [jportable]: https://portableapps.com/apps/utilities/java_portable "jPortable"

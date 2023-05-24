@@ -115,7 +115,7 @@ Right click on the IPV4 node just below your server name, and choose `Define Ven
 
 <img src="define-vendor-classes-dialog.png" />
 
-Add a new vendor class by clicking the Add button. In the `New Class` window, enter a Display Name (I suggest `Ubiquiti`) and an optionally enter a description. In the ASCII portion of the lowest box type the letters `ubnt`. Make sure there's nothing else, to include white space, in that box. The whole line should read `0000 75 62 6E 74 ubnt` as in the screenshot. Click OK, then Close to close both windows.
+Add a new vendor class by clicking the Add button. In the `New Class` window, enter a Display Name (I suggest `Ubiquiti`) and optionally enter a description. In the ASCII portion of the lowest box type the letters `ubnt`. Make sure there's nothing else, to include white space, in that box. The whole line should read `0000 75 62 6E 74 ubnt` as in the screenshot. Click OK, then Close to close both windows.
 
 <img src="new-class-dialog-filled.png" />
 

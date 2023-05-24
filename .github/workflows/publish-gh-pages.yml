@@ -51,7 +51,6 @@ jobs:
           tool: zola@${{ env.ZOLA_VERSION }}
       - name: Build site
         run: |
-          echo "BUILDING SITE"
           zola build -o _site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

@@ -21,7 +21,7 @@ Out of the blue one of those amazing super-knowledgeable folks tosses out a crat
 
 This post strives to be that list. It is a categorized list of crates that I wish I'd known about and hope will help you out. You will find the crate's name, a small description, and a link to it on [crates.io][crates.io].
 
-Some of these will be rust standard crates but most will probably be 3rd party crates. Feel free to send in submissions for consideration. I reserve full deciding rights on the inclusion of a suggestion.
+Some of these will be rust standard crates but most will probably be 3rd party crates. Feel free to send in submissions for consideration, but remember I will decide whether or not it should be included here.
 
 ## The Crates
 

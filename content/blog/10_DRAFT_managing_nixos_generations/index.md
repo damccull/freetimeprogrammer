@@ -2,6 +2,7 @@
 title = "Managing NixOS Generations"
 date = 2024-06-25T15:05:00Z
 update = 2024-06-25T15:05:00Z
+draft = true
 
 description = "NixOS likes to spam your boot menu and keep unused things on your hard drive. Fix that easily!"
 

@@ -40,7 +40,7 @@ jobs:
         run: |
           zola build -o _site
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
   deploy:
     name: Deploy to Github Pages
     environment:
@@ -51,4 +51,4 @@ jobs:
     steps:
       - name: Deploy the site
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4

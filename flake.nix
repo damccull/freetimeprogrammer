@@ -3,17 +3,28 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
-  outputs = inputs:
+  outputs =
+    inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
-      perSystem = { config, self', pkgs, lib, system, ... }:
+      perSystem =
+        {
+          config,
+          self',
+          pkgs,
+          lib,
+          system,
+          ...
+        }:
         let
           devDeps = with pkgs; [
             zola
           ];
-          mkDevShell = arg1:
+          mkDevShell =
+            arg1:
             pkgs.mkShell {
               shellHook = ''
+                exec env SHELL=${pkgs.bashInteractive}/bin/bash zellij --layout ./zellij_layout.kdl
               '';
               LB_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
               nativeBuildInputs = devDeps ++ [ arg1 ];

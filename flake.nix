@@ -18,13 +18,14 @@
         }:
         let
           devDeps = with pkgs; [
+            fish
             zola
           ];
           mkDevShell =
             arg1:
             pkgs.mkShell {
               shellHook = ''
-                exec env SHELL=${pkgs.bashInteractive}/bin/bash zellij --layout ./zellij_layout.kdl
+                exec env SHELL=${pkgs.fish}/bin/fish zellij --layout ./zellij_layout.kdl
               '';
               LB_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
               nativeBuildInputs = devDeps ++ [ arg1 ];

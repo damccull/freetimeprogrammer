@@ -313,7 +313,134 @@ Try again to visit the web page and see if everything is online.
 
 ## Docker
 
+Let's ensure the prerequisites are met:
+1. Install docker
 
+Create a folder path for storing your containers and their data. Here I only create one
+for foundryvtt but I put it under 'containers' because I can add additional pods or individual
+containers to this folder later and keep my home folder clean. The 'fvtt-home' folder is where
+FoundryVTT software will store all its data.
+
+```bash
+mkdir -p ~/containers/foundryvtt
+
+mkdir -p ~/containers/foundryvtt/fvtt-home
+```
+
+Create a file to hold the tunnel key we got earlier from Cloudflare. You only need the token
+portion of the command. Paste it after the token variable.
+
+File name: `/home/<user>/containers/foundryvtt/tunnel.env`
+```env
+TUNNEL_TOKEN=fgGkM...
+```
+
+Create a file to store your secrets. This will need to be ignored by git if you choose to keep
+this configuration in a git repo. This file is used by felddy's container to automatically
+download the node version of FoundryVTT and set the admin password for your server. Replace
+each value with your own information.
+
+File name: `/home/<user>/containers/foundryvtt/secrets.json`
+```json
+{
+    "foundry_admin_key": "<desired admin panel password>",
+    "foundry_password": "<foundryvtt.com password>",
+    "foundry_username": "<foundryvtt.com username>"
+}
+```
+
+Create a docker compose configuration file to define the services and configure the pod. In the
+following compose file there are some changes you need to make:
+
+1. Change the 'volumes' path to match your user name.
+2. Type 'id' on your command line and set the "user" line to your user id and group id. This is
+   the line that says `user: 1000:100`. The first number is the user id and the second is the
+   group id.
+3. This example uses FoundryVTT version 12.343 even though it use's felddy's version 13
+   container. If you want version 13 of the FoundryVTT server, delete the `FOUNDRY_VERSION`
+   environment variable.
+
+File name: `/home/<user>/containers/foundryvtt/compose.yml`
+```yml
+services:
+  foundryvtt:
+    image: felddy/foundryvtt:13
+    user: 1000:100
+    stop_grace_period: 5m
+    restart: always
+    deploy:
+      replicas: 1
+    volumes:
+      - /home/<user>/containers/foundryvtt/fvtt-home:/data
+    secrets:
+      - source: fvtt_secrets
+        target: config.json
+    environment:
+      - CONTAINER_CACHE=/data/download_cache
+      - CONTAINER_PRESERVE_CONFIG=true
+      - FOUNDRY_VERSION=12.343
+      - FOUNDRY_HOME=.
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run
+    restart: always
+    env_file: tunnel.env
+    depends_on:
+      - foundryvtt
+
+secrets:
+  fvtt_secrets:
+    file: secrets.json
+```
+
+Now we need to test the podman compose setup, ensure it creates its data in the right place and
+is able to download and start the server.
+
+```bash
+cd ~/containers/foundryvtt
+docker compose up
+```
+
+Check that the 'fvtt-home' folder is no longer empty and that the owner and group of the files
+inside are the same as the user you are logged in as. If you see numbers instead of your
+username and the name of the group you belong to (which might be 'users' or it might also be
+your username), it just means that podman is using virtual IDs inside the container. It should
+not be an issue if it is, but it also shouldn't be doing that due to the way we create the pod
+in the systemd service.
+
+```bash
+ls -al fvtt-home
+
+<user>@server ~/containers/foundryvtt> ls -al fvtt-home/
+total 0
+drwxrwxr-x 1 <user> users  70 Jul 18 14:00 .
+drwxr-xr-x 1 <user> users 154 Jul 18 13:43 ..
+drwxrwxr-x 1 <user> users  64 Jul  2 12:09 Backups
+drwxrwxr-x 1 <user> users 188 Jul 14 16:43 Config
+drwxrwxr-x 1 <user> users 120 Nov 21  2023 Data
+drwxrwxr-x 1 <user> users  66 Jul 18 14:01 download_cache
+drwxrwxr-x 1 <user> users 694 Jul 17 14:07 Logs
+```
+
+You can check the logs for the FoundryVTT container as well.
+
+```bash
+# or, for a single container, but you will have to ensure the container name matches
+docker logs foundryvtt_foundryvtt_1
+```
+
+If everything is working correctly and you can connect to https://fvtt.yourdomain.com in your
+browser and get the FoundryVTT interface, then we can just enable the service and it should
+auto-start with your server from now on.
+
+```bash
+# First, turn off the pod to prevent conflicts
+cd ~/containers/foundryvtt
+docker compose down
+```
+
+Try again to visit the web page and see if everything is online.
 
 
 [foundry-vtt]: https://foundryvtt.com

@@ -455,6 +455,14 @@ cd ~/containers/foundryvtt
 docker compose down
 ```
 
+# The Ending
+The overall process to get a containerized FoundryVTT service running isn't too difficult. It
+does require some basic understanding of the linux, Docker/Podman, and how services and
+containers work, but it's something anyone can do with a bit of research. From here, I would
+encourage you to get to know docker or podman better, play around with the command line a lot
+more, and do some research on tunnels and reverse tunnels.
+
+Good luck!
 
 [foundry-vtt]: https://foundryvtt.com
 [foundry-vtt-partners]: https://foundryvtt.com/article/partnerships/

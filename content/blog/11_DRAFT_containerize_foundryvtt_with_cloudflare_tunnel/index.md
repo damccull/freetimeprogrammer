@@ -231,11 +231,24 @@ own, but I will demonstrate the systemd version.
 Let's ensure the prerequisites are met:
 1. Install podman
 2. Install podman-compose
+3. Ensure podman has search registries setup
 
+### Search Registries
+Docker defaults to docker.io for its registry but podman doesn't always default to a particular
+registry. Let's tell it to use docker.io, then quay.io by default.
+
+File name: `/home/<user>/.config/containers/registries.conf`
+```toml
+# An array of host[:port] registries to try if the image name is not fully qualified
+unqualified-search-registries = ["docker.io", "quay.io"]
+```
+
+### Pod Configuration
 Create a new file in your linux server under the user you want to run the FoundryVTT server
-and pase the following:
+and paste the following configuration ensuring that you change the username in the working folder
+variable.
 
-File name: `/home/<username>/.config/systemd/user/podman-foundryvtt.service`
+File name: `/home/<username>/.config/systemd/user/podman-compose@foundryvtt.service`
 ```ini
 [Install]
 WantedBy=default.target
@@ -245,7 +258,7 @@ Environment=COMPOSE_PROJECT_NAME=foundryvtt
 Environment=XDG_RUNTIME_DIR=/run/user/1000
 ExecStart=podman-compose wait
 # ExecStartPre=launch-fvtt.sh
-ExecStartPre=podman-compose --pod-args "--userns keep-id" up --no-start
+ExecStartPre=podman-compose --pod-args "--userns keep-id" --in-pod pod_foundryvtt up --no-start
 ExecStartPre=podman pod start pod_foundryvtt
 ExecStop=podman pod stop pod_foundryvtt
 ExecStop=podman-compose down
@@ -263,17 +276,19 @@ Create this start script which will be used by the systemd service and make it e
 File name: `/home/<user>/containers/foundryvtt/launch-fvtt.sh`
 ```bash
 #!/usr/bin/env bash
-podman-compose --pod-args "--userns keep-id" up --no-start
+podman-compose --pod-args "--userns keep-id" --in-pod pod_foundryvtt up --no-start
 podman pod start pod_foundryvtt
 ```
 
 
 Now we need to test the podman compose setup, ensure it creates its data in the right place and
-is able to download and start the server.
+is able to download and start the server. When you run this, you will be prompted for which
+registry to pull the image from if you do not already have these images locally.
 
 ```bash
 cd ~/containers/foundryvtt
-podman-compose --pod-args "--userns keep-id" up
+podman-compose --pod-args "--userns keep-id" --in-pod pod_foundryvtt up --no-start
+podman pod start pod_foundryvtt
 ```
 
 Check that the 'fvtt-home' folder is no longer empty and that the owner and group of the files
@@ -307,15 +322,20 @@ podman pod logs pod_foundryvtt
 podman logs foundryvtt_foundryvtt_1
 ```
 
+Next, stop and remove the pod to avoid conflicts later.
+
+```bash
+# First, turn off the pod to prevent conflicts
+cd ~/containers/foundryvtt
+podman pod stop pod_foundryvtt
+podman pod rm pod_foundryvtt
+```
+
 If everything is working correctly and you can connect to https://fvtt.yourdomain.com in your
 browser and get the FoundryVTT interface, then we can just enable the service and it should
 auto-start with your server from now on.
 
 ```bash
-# First, turn off the pod to prevent conflicts
-cd ~/containers/foundryvtt
-podman-compose down
-
 # Next, enable the service
 systemctl --user enable --now podman-compose@foundryvtt.service
 

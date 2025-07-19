@@ -255,9 +255,9 @@ WantedBy=default.target
 [Service]
 Environment=COMPOSE_PROJECT_NAME=foundryvtt
 Environment=XDG_RUNTIME_DIR=/run/user/1000
-ExecStart=podman-compose wait
 ExecStartPre=podman-compose --pod-args "--userns keep-id" --in-pod pod_foundryvtt up --no-start
 ExecStartPre=podman pod start pod_foundryvtt
+ExecStart=podman-compose wait
 ExecStop=podman pod stop pod_foundryvtt
 ExecStop=podman-compose down
 WorkingDirectory=/home/<user>/containers/foundryvtt

@@ -247,7 +247,7 @@ Create a new file in your linux server under the user you want to run the Foundr
 and paste the following configuration ensuring that you change the username in the working folder
 variable.
 
-File name: `/home/<username>/.config/systemd/user/podman-compose@foundryvtt.service`
+File name: `/home/<username>/.config/systemd/user/podman-foundryvtt.service`
 ```ini
 [Install]
 WantedBy=default.target
@@ -323,13 +323,13 @@ auto-start with your server from now on.
 
 ```bash
 # Next, enable the service
-systemctl --user enable --now podman-compose@foundryvtt.service
+systemctl --user enable --now podman-foundryvtt.service
 
 # Check if it started automatically
-systemctl --user status podman-compose@foundryvtt.service
+systemctl --user status podman-foundryvtt.service
 
 # If not, you can manually start it
-systemctl --user start podman-compose@foundryvtt.service
+systemctl --user start podman-foundryvtt.service
 ```
 
 Try again to visit the web page and see if everything is online.

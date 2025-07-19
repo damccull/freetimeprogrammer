@@ -411,7 +411,7 @@ is able to download and start the server.
 
 ```bash
 cd ~/containers/foundryvtt
-docker compose up
+docker compose up -d
 ```
 
 Check that the 'fvtt-home' folder is no longer empty and that the owner and group of the files
@@ -438,21 +438,21 @@ drwxrwxr-x 1 <user> users 694 Jul 17 14:07 Logs
 You can check the logs for the FoundryVTT container as well.
 
 ```bash
-# or, for a single container, but you will have to ensure the container name matches
-docker logs foundryvtt_foundryvtt_1
+# or, for a single container in the pair
+docker compose logs foundryvtt
 ```
 
 If everything is working correctly and you can connect to https://fvtt.yourdomain.com in your
-browser and get the FoundryVTT interface, then we can just enable the service and it should
-auto-start with your server from now on.
+browser and get the FoundryVTT interface, then you are done. The containers should auto-start
+when the Docker engine starts and auto-restart if they crash.
 
+If you want to turn the service off, type this:
 ```bash
 # First, turn off the pod to prevent conflicts
 cd ~/containers/foundryvtt
 docker compose down
 ```
 
-Try again to visit the web page and see if everything is online.
 
 
 [foundry-vtt]: https://foundryvtt.com

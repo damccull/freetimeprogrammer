@@ -109,6 +109,18 @@ the Docker configuration.
     - Service URL: `foundryvtt:30000`
 7. Save the tunnel and ensure you save the Docker command from earlier. You can get back to
    that commmand by editing this tunnel you've just created if you lose it.
+8. On the left menu, click the left "back" arrow to leave zero trust and go back to the
+   dashboard.
+9. Open the base domain name you chose to use, then choose the Network on the left menu. In
+   the settings panel that opens, enable the WebSockets option.
+10. On the left menu, click Rules to expand, then choose Overview, then "Create rule" button,
+    and create a Configuration Rule.
+11. Name your new rule "foundryvtt no rockerloader" and fill out the options as follows:
+    - Field: `Hostname`
+    - Operator: `equals`
+    - Value: `fvtt.yourdomain.com` or whatever address you chose
+    - Rocket Loader: Click add, and leave it unchecked
+12. Deploy the rule. This solves an issue that breaks the FoundryVTT UI.
 
 # Container Setup
 Now that we have a tunnel configured on Cloudflare, we need to get our containers set up. I am
@@ -394,7 +406,7 @@ secrets:
     file: secrets.json
 ```
 
-Now we need to test the podman compose setup, ensure it creates its data in the right place and
+Now we need to test the docker compose setup, ensure it creates its data in the right place and
 is able to download and start the server.
 
 ```bash

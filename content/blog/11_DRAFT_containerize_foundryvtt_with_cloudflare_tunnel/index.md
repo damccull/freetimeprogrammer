@@ -220,7 +220,7 @@ File name: `/home/<user>/containers/foundryvtt/secrets.json`
 }
 ```
 
-Create a podman-compose configuration file to define the services and configure the pod. In the
+Create a compose configuration file to define the services and configure the pod. In the
 following compose file there are some changes you need to make:
 
 1. Change the 'volumes' path to match your user name.
@@ -454,7 +454,6 @@ If you want to turn the service off, type this:
 cd ~/containers/foundryvtt
 docker compose down
 ```
-
 
 
 [foundry-vtt]: https://foundryvtt.com

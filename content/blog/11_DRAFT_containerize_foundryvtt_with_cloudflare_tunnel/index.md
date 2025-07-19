@@ -69,6 +69,7 @@ on a computer connected to the internet.
 I will leave it to you to get this far.
 
 # Cloudflare Tunnels Setup
+## What's a Tunnel?
 Let's first start by understanding the tunnel. Tunnels, in networking, are simply a way to wrap
 one packet inside of another, generally to let the inner packet traverse a network border, or
 be routed to a network that is not publicly routeable (like your 192.168.1.1 home network).
@@ -87,6 +88,7 @@ Cloudflare forwards them on to the original client.
 
 See a bunch of youtube videos for a more in-depth understanding.
 
+## Make the Tunnel
 Now let's get the Cloudflare side of the tunnel set up. To use this option, you will need to
 own a domain name and have Cloudflare.com be the DNS authority for your domain, as stated in
 the prerequisites. Once that is done, however, you set up the tunnel configuration and grab

@@ -143,51 +143,9 @@ you restart the container.
 While I have been using Docker for years, I have recently started to use podman for better
 security, since it runs as a user and not as root.
 
-## Podman
-Podman will require us to manually create a user-level systemd service. If you are using
-another init system for your linux server, you will need to figure out how to do this on your
-own, but I will demonstrate the systemd version.
+## Common Setup for Both Podman and Docker
 
-Let's ensure the prerequisites are met:
-1. Install podman
-2. Install podman-compose
-
-Create a new file in your linux server under the user you want to run the FoundryVTT server
-and pase the following:
-
-File name: `/home/<username>/.config/systemd/user/podman-foundryvtt.service`
-```ini
-[Install]
-WantedBy=default.target
-
-[Service]
-Environment=COMPOSE_PROJECT_NAME=foundryvtt
-Environment=XDG_RUNTIME_DIR=/run/user/1000
-ExecStart=podman-compose wait
-# ExecStartPre=launch-fvtt.sh
-ExecStartPre=podman-compose --pod-args "--userns keep-id" up --no-start
-ExecStartPre=podman pod start pod_foundryvtt
-ExecStop=podman pod stop pod_foundryvtt
-ExecStop=podman-compose down
-WorkingDirectory=/home/<user>/containers/foundryvtt
-
-[Unit]
-After=network-online.target
-Description=FoundryVTT service
-```
-
-TODO: REMOVE THIS SCRIPT IF POSSIBLE BASED ON ABOVE
-Create this start script which will be used by the systemd service and make it executable with
-`chmod +x launch-fvtt.sh`
-
-File name: `/home/<user>/containers/foundryvtt/launch-fvtt.sh`
-```bash
-#!/usr/bin/env bash
-podman-compose --pod-args "--userns keep-id" up --no-start
-podman pod start pod_foundryvtt
-```
-
-Next, create a folder path for storing your containers and their data. Here I only create one
+Create a folder path for storing your containers and their data. Here I only create one
 for foundryvtt but I put it under 'containers' because I can add additional pods or individual
 containers to this folder later and keep my home folder clean. The 'fvtt-home' folder is where
 FoundryVTT software will store all its data.
@@ -265,6 +223,51 @@ secrets:
     file: secrets.json
 ```
 
+## Podman
+Podman will require us to manually create a user-level systemd service. If you are using
+another init system for your linux server, you will need to figure out how to do this on your
+own, but I will demonstrate the systemd version.
+
+Let's ensure the prerequisites are met:
+1. Install podman
+2. Install podman-compose
+
+Create a new file in your linux server under the user you want to run the FoundryVTT server
+and pase the following:
+
+File name: `/home/<username>/.config/systemd/user/podman-foundryvtt.service`
+```ini
+[Install]
+WantedBy=default.target
+
+[Service]
+Environment=COMPOSE_PROJECT_NAME=foundryvtt
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+ExecStart=podman-compose wait
+# ExecStartPre=launch-fvtt.sh
+ExecStartPre=podman-compose --pod-args "--userns keep-id" up --no-start
+ExecStartPre=podman pod start pod_foundryvtt
+ExecStop=podman pod stop pod_foundryvtt
+ExecStop=podman-compose down
+WorkingDirectory=/home/<user>/containers/foundryvtt
+
+[Unit]
+After=network-online.target
+Description=FoundryVTT service
+```
+
+TODO: REMOVE THIS SCRIPT IF POSSIBLE BASED ON ABOVE
+Create this start script which will be used by the systemd service and make it executable with
+`chmod +x launch-fvtt.sh`
+
+File name: `/home/<user>/containers/foundryvtt/launch-fvtt.sh`
+```bash
+#!/usr/bin/env bash
+podman-compose --pod-args "--userns keep-id" up --no-start
+podman pod start pod_foundryvtt
+```
+
+
 Now we need to test the podman compose setup, ensure it creates its data in the right place and
 is able to download and start the server.
 
@@ -329,84 +332,7 @@ Try again to visit the web page and see if everything is online.
 
 Let's ensure the prerequisites are met:
 1. Install docker
-
-Create a folder path for storing your containers and their data. Here I only create one
-for foundryvtt but I put it under 'containers' because I can add additional pods or individual
-containers to this folder later and keep my home folder clean. The 'fvtt-home' folder is where
-FoundryVTT software will store all its data.
-
-```bash
-mkdir -p ~/containers/foundryvtt
-
-mkdir -p ~/containers/foundryvtt/fvtt-home
-```
-
-Create a file to hold the tunnel key we got earlier from Cloudflare. You only need the token
-portion of the command. Paste it after the token variable.
-
-File name: `/home/<user>/containers/foundryvtt/tunnel.env`
-```env
-TUNNEL_TOKEN=fgGkM...
-```
-
-Create a file to store your secrets. This will need to be ignored by git if you choose to keep
-this configuration in a git repo. This file is used by felddy's container to automatically
-download the node version of FoundryVTT and set the admin password for your server. Replace
-each value with your own information.
-
-File name: `/home/<user>/containers/foundryvtt/secrets.json`
-```json
-{
-    "foundry_admin_key": "<desired admin panel password>",
-    "foundry_password": "<foundryvtt.com password>",
-    "foundry_username": "<foundryvtt.com username>"
-}
-```
-
-Create a docker compose configuration file to define the services and configure the pod. In the
-following compose file there are some changes you need to make:
-
-1. Change the 'volumes' path to match your user name.
-2. Type 'id' on your command line and set the "user" line to your user id and group id. This is
-   the line that says `user: 1000:100`. The first number is the user id and the second is the
-   group id.
-3. This example uses FoundryVTT version 12.343 even though it use's felddy's version 13
-   container. If you want version 13 of the FoundryVTT server, delete the `FOUNDRY_VERSION`
-   environment variable.
-
-File name: `/home/<user>/containers/foundryvtt/compose.yml`
-```yml
-services:
-  foundryvtt:
-    image: felddy/foundryvtt:13
-    user: 1000:100
-    stop_grace_period: 5m
-    restart: always
-    deploy:
-      replicas: 1
-    volumes:
-      - /home/<user>/containers/foundryvtt/fvtt-home:/data
-    secrets:
-      - source: fvtt_secrets
-        target: config.json
-    environment:
-      - CONTAINER_CACHE=/data/download_cache
-      - CONTAINER_PRESERVE_CONFIG=true
-      - FOUNDRY_VERSION=12.343
-      - FOUNDRY_HOME=.
-
-  tunnel:
-    image: cloudflare/cloudflared:latest
-    command: tunnel --no-autoupdate run
-    restart: always
-    env_file: tunnel.env
-    depends_on:
-      - foundryvtt
-
-secrets:
-  fvtt_secrets:
-    file: secrets.json
-```
+2. Ensure your user is part of the 'docker' linux group and log all the way out, then back in
 
 Now we need to test the docker compose setup, ensure it creates its data in the right place and
 is able to download and start the server.

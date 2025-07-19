@@ -256,7 +256,6 @@ WantedBy=default.target
 Environment=COMPOSE_PROJECT_NAME=foundryvtt
 Environment=XDG_RUNTIME_DIR=/run/user/1000
 ExecStart=podman-compose wait
-# ExecStartPre=launch-fvtt.sh
 ExecStartPre=podman-compose --pod-args "--userns keep-id" --in-pod pod_foundryvtt up --no-start
 ExecStartPre=podman pod start pod_foundryvtt
 ExecStop=podman pod stop pod_foundryvtt
@@ -267,18 +266,6 @@ WorkingDirectory=/home/<user>/containers/foundryvtt
 After=network-online.target
 Description=FoundryVTT service
 ```
-
-TODO: REMOVE THIS SCRIPT IF POSSIBLE BASED ON ABOVE
-Create this start script which will be used by the systemd service and make it executable with
-`chmod +x launch-fvtt.sh`
-
-File name: `/home/<user>/containers/foundryvtt/launch-fvtt.sh`
-```bash
-#!/usr/bin/env bash
-podman-compose --pod-args "--userns keep-id" --in-pod pod_foundryvtt up --no-start
-podman pod start pod_foundryvtt
-```
-
 
 Now we need to test the podman compose setup, ensure it creates its data in the right place and
 is able to download and start the server. When you run this, you will be prompted for which
